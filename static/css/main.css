@@ -1,0 +1,51 @@
+#login-form .panel-body .form-group {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 20px;
+}
+
+#login-form .panel-body .form-group:last-child {
+    margin-top: 7px;
+}
+
+#login-form .panel-body .form-group .control-label {
+    padding-top: 16px;
+}
+
+#login-form .panel-body .error-header {
+    margin: -15px -15px 15px -15px;
+}
+
+#login-form .panel-body .error-header .alert {
+    padding: 7px;
+}
+
+#login-form .panel-heading h1 {
+    padding: 7px;
+}
+
+#login-form {
+    padding-top: calc(40vh - 155px);
+}
+
+#login-form .panel-body .form-group button {
+    float: right;
+}
+
+table .label-floating.form-group {
+    margin: 0;
+    padding-bottom: 0;
+}
+
+table .label-floating.form-group input {
+    margin-bottom: 0;
+}
+
+table tr td:first-child {
+    vertical-align: middle;
+}
+
+table tr td .checkbox {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}

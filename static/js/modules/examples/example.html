@@ -1,0 +1,73 @@
+<script type="text/html" id="example">
+        <div class="row nav-line">
+            <div class="col-xs-6">
+                <select class="dropdown"
+                        data-bind="options: requestTypeOptions, value: selectedRequestType, optionsText: 'text', dropdown: selectedRequestType"></select>
+            </div>
+        </div>
+        <div class="row request-header">
+            <div class="col-xs-2">
+                <span>Content-Type:</span>
+            </div>
+            <div class="col-xs-4">
+                <span data-bind="text: contentType"></span>
+                <!--<select class="dropdown"-->
+                        <!--data-bind="options: contentTypeOptions, value: selectedContentType, dropdown: true"></select>-->
+            </div>
+        </div>
+        <div class="row request-header">
+            <div class="col-xs-2">
+                <span>Request Url:</span>
+            </div>
+            <div class="col-xs-4">
+                <span data-bind="text: requestUrl"></span>
+            </div>
+        </div>
+        <div class="row request-header">
+            <div class="col-xs-2">
+                <span>Request Method:</span>
+            </div>
+            <div class="col-xs-4">
+                <span data-bind="text: requestMethod"></span>
+            </div>
+        </div>
+        <div class="row nav-line">
+            <div class="col-xs-2">
+                <span>Запит:</span>
+            </div>
+            <div class="col-xs-8 col-xs-offset-2">
+                <a class="button-link" style="margin-right: 0;" data-bind="click: addRequestAuthContent">Авторизаційні дані</a>
+                <a class="button-link" data-bind="click: addTestContent">Тестова транзакція</a>
+            </div>
+        </div>
+        <div class="row nav-line">
+            <div class="col-xs-12">
+                <textarea class="full-size-textarea" data-bind="value: requestContent" rows="24"></textarea>
+            </div>
+        </div>
+        <div class="row nav-line" data-bind="with: error">
+            <div class="col-xs-12" data-bind="if: isError">
+                <span data-bind="text: errorText" style="color: #E42217;"></span>
+            </div>
+        </div>
+        <div class="row nav-line">
+            <div class="col-xs-2">
+                <span>Відповідь:</span>
+            </div>
+            <div class="col-xs-8 col-xs-offset-2">
+                <span class="right-span" data-bind="text: statusCode"></span>
+                <span class="right-span">Status Code:&nbsp&nbsp</span>
+            </div>
+        </div>
+        <div class="row nav-line">
+            <div class="col-xs-12">
+                <textarea class="full-size-textarea" data-bind="value: responseContent" rows="18"></textarea>
+            </div>
+        </div>
+        <div class="row nav-line">
+            <div class="col-xs-12">
+                <button class="btn btn-default" data-bind="click: doRequest">Запит</button>
+                <button class="btn btn-default" data-bind="visible: isNextAvailable, click: doNext">Далі</button>
+            </div>
+        </div>
+</script>
