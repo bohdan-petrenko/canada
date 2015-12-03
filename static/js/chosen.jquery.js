@@ -335,13 +335,15 @@
 
         AbstractChosen.prototype.winnow_results = function() {
             var escapedSearchText, option, regex, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
-            this.no_results_clear();
+            //this.no_results_clear();
+            this.add_new_option_clear();
             results = 0;
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             zregex = new RegExp(escapedSearchText, 'i');
             regex = this.get_search_regex(escapedSearchText);
             _ref = this.results_data;
+            var fullEquals = false;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
                 option.search_match = false;
@@ -378,15 +380,23 @@
                         }
                     }
                 }
+                if (!!searchText && !!option.html && searchText.toUpperCase() == option.html.toUpperCase()) {
+                    fullEquals = true;
+                }
             }
             this.result_clear_highlight();
             if (results < 1 && searchText.length) {
                 this.update_results_content("");
-                return this.no_results(searchText);
+                //return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
-                return this.winnow_results_set_highlight();
+                //this.winnow_results_set_highlight();
             }
+            if (!fullEquals && searchText.length) {
+                this.add_new_option(searchText);
+
+            }
+            this.winnow_results_set_highlight();
         };
 
         AbstractChosen.prototype.get_search_regex = function(escaped_search_string) {
@@ -479,11 +489,12 @@
         };
 
         AbstractChosen.prototype.container_width = function() {
-            if (this.options.width != null) {
-                return this.options.width;
-            } else {
-                return "" + this.form_field.offsetWidth + "px";
-            }
+            return '100%';
+            //if (this.options.width != null) {
+            //    return this.options.width;
+            //} else {
+            //    return "" + this.form_field.offsetWidth + "px";
+            //}
         };
 
         AbstractChosen.prototype.include_option_in_results = function(option) {
@@ -540,11 +551,11 @@
             return true;
         };
 
-        AbstractChosen.default_multiple_text = "Select Some Options";
+        AbstractChosen.default_multiple_text = "";
 
         AbstractChosen.default_single_text = "Select an Option";
 
-        AbstractChosen.default_no_result_text = "No results match";
+        AbstractChosen.default_no_result_text = "Додати";
 
         return AbstractChosen;
 
@@ -965,7 +976,7 @@
             var choice, close_link,
                 _this = this;
             choice = $('<li />', {
-                "class": "search-choice"
+                "class": "search-choice" + (item.customOption ? " custom-option" : "")
             }).html("<span>" + (this.choice_label(item)) + "</span>");
             if (item.disabled) {
                 choice.addClass('search-choice-disabled');
@@ -991,12 +1002,17 @@
         };
 
         Chosen.prototype.choice_destroy = function(link) {
-            if (this.result_deselect(link[0].getAttribute("data-option-array-index"))) {
+            var optionId = link[0].getAttribute("data-option-array-index");
+            if (this.result_deselect(optionId)) {
                 this.show_search_field_default();
                 if (this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1) {
                     this.results_hide();
                 }
                 link.parents('li').first().remove();
+                if ($($(link).parent()).hasClass('custom-option')) {
+                    this.remove_custom_option_from_dom(optionId);
+                    this.update_custom_options(optionId);
+                }
                 return this.search_field_scale();
             }
         };
@@ -1022,6 +1038,15 @@
             var high, item;
             if (this.result_highlight) {
                 high = this.result_highlight;
+                if (high.hasClass('add-new-option')) {
+                    var newOptionName = high.find("span").first().html();
+                    this.add_new_option_to_dom(newOptionName);
+                    this.results_data[this.results_data.length-1].search_match = true;
+                    this.results_data[this.results_data.length-1].search_text = newOptionName;
+                    this.update_results_content(this.results_option_build());
+                    high = $($(this.form_field).next().find("li[data-option-array-index*='" + (this.results_data.length-1) + "']"));
+                }
+
                 this.result_clear_highlight();
                 if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                     this.form_field_jq.trigger("chosen:maxselected", {
@@ -1036,6 +1061,9 @@
                 }
                 high.addClass("result-selected");
                 item = this.results_data[high[0].getAttribute("data-option-array-index")];
+                if (high.hasClass('custom-option')) {
+                    item.customOption = true;
+                }
                 item.selected = true;
                 this.form_field.options[item.options_index].selected = true;
                 this.selected_option_count = null;
@@ -1128,6 +1156,50 @@
 
         Chosen.prototype.no_results_clear = function() {
             return this.search_results.find(".no-results").remove();
+        };
+
+        Chosen.prototype.add_new_option = function(terms) {
+            var no_results_html;
+            no_results_html = $('<li class="active-result add-new-option">' + this.results_none_found +
+                    ' "<span></span><span class="glyphicon glyphicon-plus right-icon"></span>"</li>');
+            no_results_html.attr('data-option-array-index', this.results_data.length);
+            no_results_html.find("span").first().html(terms);
+            this.search_results.append(no_results_html);
+            return this.form_field_jq.trigger("chosen:no_results", {
+                chosen: this
+            });
+        };
+
+        Chosen.prototype.add_new_option_clear = function() {
+            return this.search_results.find(".add-new-option").remove();
+        };
+
+        Chosen.prototype.add_new_option_to_dom = function(newOption) {
+            var select = $(this.form_field);
+            select.append($('<option />', {html: newOption, 'class': 'custom-option'}));
+            this.results_data = SelectParser.select_to_array(select.get(0));
+        };
+
+        Chosen.prototype.remove_custom_option_from_dom = function(optionId) {
+            var select = $(this.form_field),
+                optionText = this.results_data[optionId].html;
+            select.find('option').each(function() {
+                if ($(this).hasClass('custom-option')
+                    && $(this).val().trim().toUpperCase() == optionText.trim().toUpperCase()) {
+                    $(this).remove();
+                }
+            });
+            this.results_data = SelectParser.select_to_array(select.get(0));
+        };
+
+        Chosen.prototype.update_custom_options = function(optionId) {
+            $(this.form_field).next().find('ul.chosen-choices li.search-choice.custom-option').each(function() {
+                var currOption = $(this).find('a.search-choice-close'),
+                    currOptionId = currOption.attr('data-option-array-index');
+                if (+currOptionId > +optionId) {
+                    currOption.attr('data-option-array-index', (+currOptionId)-1);
+                }
+            });
         };
 
         Chosen.prototype.keydown_arrow = function() {

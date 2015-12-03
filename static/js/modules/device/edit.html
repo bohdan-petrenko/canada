@@ -1,0 +1,93 @@
+<script type="text/html" id="edit">
+    <div class="row">
+        <div class="col-md-2 horizontal-padding-off">
+            <nav class="vertical-menu">
+                <ul id="options-nav">
+                    <li data-bind="click: function() {activateNavItem($element)}" class="active">Обов'язкові параметри</li>
+                    <li data-bind="click: function() {activateNavItem($element)}">Рекомендовані параметри</li>
+                    <li data-bind="click: function() {activateNavItem($element)}">Решта параметрів</li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col-md-10 horizontal-padding-off" style="padding-right: 15px">
+            <div class="well">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="text-right device-info">
+                            <span class="device-info-group">
+                                <strong>TAC:</strong>
+                                <span data-bind="text: tac"></span>
+                            </span>
+                            <span class="device-info-group">
+                                <strong>Name:</strong>
+                                <span data-bind="text: name"></span>
+                            </span>
+                            <span class="device-info-group">
+                                <strong>Model:</strong>
+                                <span data-bind="text: model"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table table-hover" data-bind="materialForm: true">
+                    <thead>
+                    <tr>
+                        <th width="20%">key</th>
+                        <th width="80%">value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>boolean</td>
+                        <td>
+                            <div class="togglebutton">
+                                <label class="checkbox-container">
+                                    <input type="checkbox" checked="">
+                                    <span class="toggle"></span>
+                                    isSelected
+                                </label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>number</td>
+                        <td>
+                            <div class="form-group label-floating is-empty">
+                                <input type="text" class="form-control" data-bind="numbersOnly: true">
+                                <span class="material-input"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>text</td>
+                        <td>
+                            <div class="form-group label-floating is-empty">
+                                <input type="text" class="form-control">
+                                <span class="material-input"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>array</td>
+                        <td>
+                            <div class="material-div">
+                                <select data-bind="options: options, selectedOptions: selectedOptions, chosen" size="5"
+                                        multiple="true"></select>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-xs-12 btn-panel-right">
+                        <button class="btn btn-primary" data-bind="click: cancelDeviceUpdating, ripples: true">Відмінити</button>
+                        <button class="btn btn-primary" data-bind="click: updateDeviceDetails, ripples: true">Зберегти</button>
+                        <button class="btn btn-default btn-raised" data-bind="click: nextNavItem, ripples: true">Далі</button>
+                        <button class="btn btn-default btn-raised" data-bind="click: previousNavItem, ripples: true">Назад</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

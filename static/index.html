@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Canada</title>
+    <title>TAC converter</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" href="img/title.png" />
@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/material.css"/>
     <link rel="stylesheet" type="text/css" href="css/ripples.css"/>
     <link rel="stylesheet" type="text/css" href="css/roboto.css"/>
+    <link rel="stylesheet" type="text/css" href="css/chosen.css"/>
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
 
     <script type="text/javascript" src="js/require.js" data-main="js/require_config.js"></script>
@@ -75,12 +76,12 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand">Canada</a>
+                    <a class="navbar-brand">TAC converter</a>
                 </div>
                 <div class="navbar-collapse collapse navbar-responsive-collapse">
-                    <!--<ul class="nav navbar-nav">-->
-                        <!--<li class="active"><a href="javascript:void(0)">Active</a></li>-->
-                    <!--</ul>-->
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="javascript:void(0)" data-bind="ripples: true">Редагування пристрою</a></li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right" data-bind="with: auth">
                         <li>
                             <a>
@@ -96,144 +97,10 @@
             </div>
         </nav>
 
-        <div class="container-fluid">
-            <div>
-                <table class="table table-hover" data-bind="materialForm: true">
-                    <thead>
-                    <tr>
-                        <th width="20%">key</th>
-                        <th width="80%">value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>boolean</td>
-                        <td>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox">
-                                    <span class="checkbox-material"><span class="check"></span></span> Notifications
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>number</td>
-                        <td>
-                            <div class="form-group label-floating is-empty">
-                                <input type="text" class="form-control" data-bind="numbersOnly: true">
-                                <span class="material-input"></span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>text</td>
-                        <td>
-                            <div class="form-group label-floating is-empty">
-                                <input type="text" class="form-control">
-                                <span class="material-input"></span>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>frequency</td>
-                        <td>
-                            <div class="form-group label-floating is-empty">
-                                <input type="text" class="form-control">
-                                <span class="material-input"></span>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+        <div class="container-fluid" data-bind="with: template">
+            <div data-bind="template: { name: templateName }"></div>
         </div>
     </div>
     </div>
-    <!-- Login form -->
-    <!--<div data-bind="if: $root.auth && !$root.auth.isLoggedIn()">-->
-        <!--<div class="login-form col-xs-6 col-xs-offset-3">-->
-            <!--<div data-bind="with: error" class="login-error">-->
-                <!--<div data-bind="if: isError">-->
-                    <!--<div data-bind="text: errorText" class="error-text"></div>-->
-                <!--</div>-->
-                <!--<div data-bind="ifnot: isError">-->
-                    <!--<div style="height: 65px"></div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<form data-bind="with: auth, materialForm: true">-->
-                <!--<div class="row">-->
-                    <!--<div class="form-group floating-label-form-group col-xs-12">-->
-                        <!--<label>Логін</label>-->
-                        <!--<input type="text" data-bind="value: login" class="form-control" placeholder="Логін">-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="row">-->
-                    <!--<div class="form-group floating-label-form-group col-xs-12">-->
-                        <!--<label>Пароль</label>-->
-                        <!--<input type="password" data-bind="value: password" class="form-control" placeholder="Пароль">-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="row">-->
-                    <!--<div class="form-group floating-label-form-group col-xs-12">-->
-                        <!--<label>Ідентифікатор терміналу</label>-->
-                        <!--<input type="text" data-bind="value: terminal, numbersOnly: true" class="form-control" placeholder="Ідентифікатор терміналу">-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<br>-->
-                <!--<button data-bind="click: doLogin" class="btn btn-default">Увійти</button>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div data-bind="if: $root.auth && $root.auth.isLoggedIn()">-->
-        <!--<div data-bind="visible: $root.auth && $root.auth.isLoggedIn()" style="display: none">-->
-            <!--<nav class="navbar navbar-default navbar-custom navbar-fixed-top">-->
-                <!--<div class="container-fluid">-->
-                    <!--<div class="navbar-header">-->
-                        <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">-->
-                            <!--<span class="sr-only">Toggle navigation</span>-->
-                            <!--<span class="icon-bar"></span>-->
-                            <!--<span class="icon-bar"></span>-->
-                            <!--<span class="icon-bar"></span>-->
-                        <!--</button>-->
-                        <!--<a class="navbar-brand">Документація GlobalMoney</a>-->
-                    <!--</div>-->
-                    <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
-                        <!--<ul class="nav navbar-nav navbar-right">-->
-                            <!--<li>-->
-                                <!--<a>Логін: <span data-bind="text: $root.auth.login"></span></a>-->
-                            <!--</li>-->
-                            <!--<li>-->
-                                <!--<a>Термінал: <span data-bind="text: $root.auth.terminal"></span></a>-->
-                            <!--</li>-->
-                        <!--</ul>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</nav>-->
-            <!--<div class="content row">-->
-                <!--<div class="servers-menu col-xs-3">-->
-                    <!--<ul data-bind="foreach: servers">-->
-                        <!--<li class="servers-menu-element active" data-bind="click: $root.runServerMenuRoute, attr: {id: route}"><span data-bind="text: name"></span></li>-->
-                    <!--</ul>-->
-                <!--</div>-->
-                <!--<div class="server-content col-xs-9">-->
-                    <!--<div class="document-menu row">-->
-                        <!--<nav>-->
-                            <!--<ul>-->
-                                <!--<li class="protocol"><a href="#ts/protocol">Опис протоколу</a></li>-->
-                                <!--<li class="example"><a href="#ts/example">Тестування протоколу</a></li>-->
-                                <!--<li class="sources"><a href="#ts/samples">Зразок програми</a></li>-->
-                            <!--</ul>-->
-                        <!--</nav>-->
-                    <!--</div>-->
-                    <!--<div class="document-content row">-->
-                        <!--<div data-bind="with: template">-->
-                            <!--<div data-bind="template: { name: templateName }"></div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
 </body>
 </html>

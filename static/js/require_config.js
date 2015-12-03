@@ -13,14 +13,16 @@ require.config({
         'moment': 'moment-with-locales',
         'bootstrap': 'bootstrap',
         'md5': 'md5',
-        'ripples': 'ripples'
+        'ripples': 'ripples',
+        'chosen': 'chosen.jquery'
     },
 
     shim: {
         'davis': {deps: ['jquery'], exports: 'Davis'},
         'bootstrap': { deps: ['jquery'], exports: 'bootstrap'},
         'md5': { deps: ['jquery'], exports: 'md5'},
-        'ripples': { deps: ['jquery'], exports: 'ripples'}
+        'ripples': { deps: ['jquery'], exports: 'ripples'},
+        'chosen': { deps: ['jquery'], exports: 'chosen'}
     },
 
     // запустить приложение

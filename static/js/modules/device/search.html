@@ -1,0 +1,61 @@
+<script type="text/html" id="search">
+    <div class="well" data-bind="materialForm: true">
+        <div class="row" >
+            <div class="col-lg-4">
+                <div class="form-group label-floating is-empty">
+                    <label class="control-label">TAC</label>
+                    <input type="text" class="form-control" data-bind="numbersOnly: true, value: tac, valueUpdate: 'keyup'">
+                    <span class="help-block">6 або 8 цифр</span>
+                    <span class="material-input"></span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group label-floating is-empty">
+                    <label class="control-label">Назва пристрою</label>
+                    <input type="text" class="form-control" data-bind="value: name, valueUpdate: 'keyup'">
+                    <span class="material-input"></span>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group label-floating is-empty">
+                    <label class="control-label">Модель пристрою</label>
+                    <input type="text" class="form-control" data-bind="value: model, valueUpdate: 'keyup'">
+                    <span class="material-input"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="btn-panel-right col-xs-12">
+                <button class="btn btn-primary" data-bind="click: addDevice, ripples: true, attr: {disabled: cantAdd}">Додати пристрій</button>
+                <button class="btn btn-primary" data-bind="click: searchDevice, ripples: true">Знайти пристрій</button>
+            </div>
+        </div>
+        <div class="row" data-bind="visible: foundedDevices().length > 0">
+            <div class="col-xs-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>TAC</th>
+                            <th>Назва пристрою</th>
+                            <th>Модель пристрою</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: foundedDevices">
+                        <tr>
+                            <td data-bind="text: tac"></td>
+                            <td data-bind="text: name"></td>
+                            <td data-bind="text: model"></td>
+                            <td title="Редагування пристрою" width="1%"
+                                    data-bind="click: function() {$parent.editDevice(tac, name, model)}">
+                                <div data-bind="ripples: true">
+                                    <span class="glyphicon glyphicon-pencil icon-btn"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>

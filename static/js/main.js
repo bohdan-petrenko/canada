@@ -7,11 +7,12 @@ require([
     'md5',
     'easy.dropdown',
     'ripples',
-    'modules/helpers'
-    //'modules/protocol/protocol_model',
+    'chosen',
+    'modules/helpers',
+    'modules/device/device_model',
     //'modules/examples/example_model',
     //'modules/samples/samples_model'
-], function ($, ko, Davis, require, bootstrapJs, md5, EasyDropDown, ripples, helpers
+], function ($, ko, Davis, require, bootstrapJs, md5, EasyDropDown, ripples, chosen, helpers, DeviceModel
     //, ProtocolModel, ExampleModel, SamplesModel
         ) {
     window.application = {};
@@ -37,6 +38,7 @@ require([
         isLoggedIn: ko.observable(),
         doLogin: function() {
             this.isLoggedIn(true);
+            window.location.hash = "#device";
             //var error = window.application.error;
             //var self = this;
             //error.isError(false);
@@ -71,6 +73,7 @@ require([
         },
         doLogout: function () {
             this.isLoggedIn(false);
+            window.location.hash = '#login';
             this.login("");
             this.password("");
         }
@@ -149,43 +152,57 @@ require([
         }
     };
 
+    ko.bindingHandlers.chosen = {
+        init: function(element, valueAccessor, allBindings){
+            var $el = $(element),
+                options = ko.unwrap(valueAccessor());
+            if (typeof options === 'object')
+                $el.chosen(options);
+            else
+                $el.chosen();
+            var input = $el.next().find('li.search-field input');
+            var parent = $el.parent();
+            if (parent.hasClass('material-div')) {
+                input.focus(function() {
+                        parent.addClass('focused');
+                    })
+                    .blur(function() {
+                        parent.removeClass('focused');
+                    })
+            }
+        }
+    };
+
     window.require = require;
     Davis.extend(Davis.hashRouting({
         forceHashRouting : true
     }));
 
     var router = Davis(function() {
-        //this.configure(function() {
-        //    this.generateRequestOnPageLoad = true;
-        //});
-        //
-        //this.get('/', function(req) {
-        //    if (window.application.auth.isLoggedIn()) {
-        //        req.redirect("ts");
-        //    } else {
-        //        req.redirect('login');
-        //    }
-        //});
-        //
-        //this.get('login', function(req) {
-        //    if (window.application.auth.isLoggedIn()) {
-        //        req.redirect("");
-        //    }
-        //});
-        //
-        //this.get('ts', function(req) {
-        //    $('.servers-menu-element').removeClass('active');
-        //    $('.servers-menu-element#ts').addClass('active');
-        //    req.redirect("ts/protocol");
-        //});
-        //
-        //this.get('ts/protocol', function(req) {
-        //    $('.document-menu ul li').removeClass('active');
-        //    $($('.document-menu ul li.protocol')).addClass('active');
-        //    window.application.template(new ProtocolModel());
-        //    $.get('resources/wiki/html/ts-protocol.html').done(function(e){window.application.template().page(e);})
-        //});
-        //
+        this.configure(function() {
+            this.generateRequestOnPageLoad = true;
+        });
+
+        this.get('/', function(req) {
+            if (window.application.auth.isLoggedIn()) {
+                req.redirect("device");
+            } else {
+                req.redirect('login');
+            }
+        });
+
+        this.get('login', function(req) {
+            //if (window.application.auth.isLoggedIn()) {
+            //    req.redirect("");
+            //}
+        });
+
+        this.get('device', function(req) {
+            //$('.servers-menu-element').removeClass('active');
+            //$('.servers-menu-element#ts').addClass('active');
+            window.application.template(new DeviceModel());
+        });
+
         //this.get('ts/example', function(req) {
         //    $('.document-menu ul li').removeClass('active');
         //    $($('.document-menu ul li.example')).addClass('active');
@@ -197,30 +214,38 @@ require([
         //    $($('.document-menu ul li.sources')).addClass('active');
         //    window.application.template(new SamplesModel());
         //});
-        //
-        //this.before(function(req) {
-        //    var auth = window.application.auth;
-        //    if (auth.login() && auth.password() && auth.terminal()) {
-        //        return;
-        //    }
-        //    $.ajax({
-        //        url: "get_user",
-        //        type: "GET",
-        //        contentType: "application/json; charset=utf-8",
-        //        statusCode: {
-        //            401: function () {
-        //                window.location.hash = "#login";
-        //                auth.isLoggedIn(false);
-        //            }
-        //        },
-        //        success: function(data, textStatus, request){
-        //            auth.login(request.getResponseHeader("login"));
-        //            auth.password(request.getResponseHeader("password"));
-        //            auth.terminal(request.getResponseHeader("terminal"));
-        //            auth.isLoggedIn(true);
-        //        }
-        //    });
-        //});
+
+        this.before(function(req) {
+            if (!window.application.auth.isLoggedIn()
+                    && window.location.hash.trim() != "#login") {
+                req.redirect('login');
+            }
+            if (window.application.auth.isLoggedIn()
+                && window.location.hash.trim() == "#login") {
+                req.redirect('/');
+            }
+            //var auth = window.application.auth;
+            //if (auth.login() && auth.password() && auth.terminal()) {
+            //    return;
+            //}
+            //$.ajax({
+            //    url: "get_user",
+            //    type: "GET",
+            //    contentType: "application/json; charset=utf-8",
+            //    statusCode: {
+            //        401: function () {
+            //            window.location.hash = "#login";
+            //            auth.isLoggedIn(false);
+            //        }
+            //    },
+            //    success: function(data, textStatus, request){
+            //        auth.login(request.getResponseHeader("login"));
+            //        auth.password(request.getResponseHeader("password"));
+            //        auth.terminal(request.getResponseHeader("terminal"));
+            //        auth.isLoggedIn(true);
+            //    }
+            //});
+        });
     });
 
     ko.applyBindings(window.application);
